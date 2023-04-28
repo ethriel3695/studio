@@ -11,7 +11,7 @@ import { Configuration } from "webpack";
 import { makeConfig } from "@foxglove/studio-base/webpack";
 
 const storybookConfig: StorybookConfig = {
-  // stories: [...findStories(path.join(__dirname, ".."))],
+  // Workaround for https://github.com/storybookjs/storybook/issues/19446
   stories: ["../packages/**/!(node_modules)**/*.stories.tsx"],
   addons: ["@storybook/addon-essentials", "@storybook/addon-actions"],
   framework: {
