@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { useCallback } from "react";
 import { makeStyles } from "tss-react/mui";
 
+// Comment
 import Logger from "@foxglove/log";
 import { AppSettingsTab } from "@foxglove/studio-base/components/AppSettingsDialog/AppSettingsDialog";
 import { useAnalytics } from "@foxglove/studio-base/context/AnalyticsContext";
