@@ -37,6 +37,8 @@ type Options = {
   allowUnusedVariables?: boolean;
   /** Specify the app version. */
   version: string;
+  /** Specify the Storybook config path for Type checking */
+  storybookConfigPath?: string;
 };
 
 // Create a partial webpack configuration required to build app using webpack.
@@ -49,7 +51,11 @@ export function makeConfig(
   const isDev = argv.mode === "development";
   const isServe = argv.env?.WEBPACK_SERVE ?? false;
 
-  const { allowUnusedVariables = isDev && isServe, version } = options;
+  const {
+    allowUnusedVariables = isDev && isServe,
+    version,
+    storybookConfigPath = undefined,
+  } = options;
 
   return {
     resolve: {
@@ -218,7 +224,7 @@ export function makeConfig(
 
       minimizer: [
         new ESBuildMinifyPlugin({
-          target: "es2022",
+          target: "es2020",
           minify: true,
         }),
       ],
@@ -262,6 +268,9 @@ export function makeConfig(
               jsx: isDev ? "react-jsxdev" : "react-jsx",
             },
           },
+          // We are only setting the configFile from Storybook as it is required to properly resolve
+          // some assumptions made while traversing the dependency tree in Chromatic.
+          configFile: storybookConfigPath,
         },
       }),
     ],

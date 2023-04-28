@@ -5,30 +5,14 @@
 /* eslint-disable filenames/match-exported */
 
 import { StorybookConfig } from "@storybook/react-webpack5";
-import fs from "fs";
 import path from "path";
 import { Configuration } from "webpack";
 
 import { makeConfig } from "@foxglove/studio-base/webpack";
 
-const STORY_SUFFIX = /\.stories\.tsx?$/;
-/** Workaround for https://github.com/storybookjs/storybook/issues/19446 */
-function* findStories(dir: string): Iterable<string> {
-  for (const child of fs.readdirSync(dir, { withFileTypes: true })) {
-    const childPath = path.join(dir, child.name);
-    if (child.isDirectory()) {
-      if (child.name === "node_modules" || child.name === ".git") {
-        continue;
-      }
-      yield* findStories(childPath);
-    } else if (STORY_SUFFIX.test(child.name)) {
-      yield childPath;
-    }
-  }
-}
-
 const storybookConfig: StorybookConfig = {
-  stories: [...findStories(path.join(__dirname, ".."))],
+  // stories: [...findStories(path.join(__dirname, ".."))],
+  stories: ["../packages/**/!(node_modules)**/*.stories.tsx"],
   addons: ["@storybook/addon-essentials", "@storybook/addon-actions"],
   framework: {
     name: "@storybook/react-webpack5",
@@ -43,12 +27,15 @@ const storybookConfig: StorybookConfig = {
     const studioWebpackConfig = makeConfig(
       undefined,
       { mode: config.mode },
-      { allowUnusedVariables: true, version: "0.0.0-storybook" },
+      {
+        allowUnusedVariables: true,
+        version: "0.0.0-storybook",
+        storybookConfigPath: `${path.resolve(__dirname)}/tsconfig.json`,
+      },
     );
     return {
       ...config,
       // context is required for ForkTsCheckerWebpackPlugin to find .storybook/tsconfig.json
-      context: path.resolve(__dirname),
       optimization: {
         ...config.optimization,
         minimize: false, // disabling minification improves build performance
