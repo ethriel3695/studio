@@ -30,7 +30,9 @@ const storybookConfig: StorybookConfig = {
       {
         allowUnusedVariables: true,
         version: "0.0.0-storybook",
-        storybookConfigPath: `${path.resolve(__dirname)}/tsconfig.json`,
+        // We are only setting the configFile from Storybook as it is required to properly resolve
+        // some assumptions made while traversing the dependency tree in Chromatic.
+        tsconfigPath: `${path.resolve(__dirname)}/tsconfig.json`,
       },
     );
     return {
