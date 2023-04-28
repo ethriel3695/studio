@@ -254,9 +254,7 @@ export function makeConfig(
       }),
       new ForkTsCheckerWebpackPlugin({
         typescript: {
-          // Note: configFile should not be overridden, it needs to differ between web, desktop,
-          // etc. so that files specific to each build (not just shared files) are also
-          // type-checked. The default behavior is to find it from the webpack `context` directory.
+          configFile: tsconfigPath,
           configOverwrite: {
             compilerOptions: {
               noUnusedLocals: !allowUnusedVariables,
@@ -264,7 +262,6 @@ export function makeConfig(
               jsx: isDev ? "react-jsxdev" : "react-jsx",
             },
           },
-          configFile: tsconfigPath,
         },
       }),
     ],
